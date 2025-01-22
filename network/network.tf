@@ -1,5 +1,5 @@
 provider "google" {
-  credentials = file("../quadsci-access.json")
+  credentials = file("quadsci-access.json")
   project = "quadsci-exercise-aaron"
   region  = "northamerica-south1"
 }
