@@ -35,10 +35,52 @@ variable "gke_primary_node_name" {
   type = string
 }
 
+variable "gcp_service_list" {
+  description ="The list of apis necessary for the project"
+  type = list(string)
+}
+
 provider "google" {
   credentials = file("quadsci-access.json")
-  project = "quadsci-exercise-aaron"
+  project = var.project_name
   region  = var.region
+}
+
+resource "google_project_service" "gcp_services" {
+  for_each = toset(var.gcp_service_list)
+  project = var.project_name
+  service = each.key
+}
+
+resource "google_compute_network" "vpc_network" {
+  name                    = "quadsci-vpc"
+  auto_create_subnetworks = false
+}
+
+resource "google_compute_subnetwork" "private_subnet" {
+  name          = "private-subnet"
+  ip_cidr_range = "10.0.0.0/24"
+  network       = google_compute_network.vpc_network.name
+  region        = var.region
+  private_ip_google_access = true
+}
+
+resource "google_compute_router" "nat_router" {
+  name    = "nat-router"
+  network = google_compute_network.vpc_network.name
+  region  = var.region
+}
+
+resource "google_compute_router_nat" "nat_config" {
+  name                               = "nat-config"
+  router                             = google_compute_router.nat_router.name
+  region                             = var.region
+  nat_ip_allocate_option             = "AUTO_ONLY"
+  source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
+  subnetwork {
+    name                    = google_compute_subnetwork.private_subnet.name
+    source_ip_ranges_to_nat = ["ALL_IP_RANGES"]
+  }
 }
 
 resource "google_workbench_instance" "vertex_instance" {
