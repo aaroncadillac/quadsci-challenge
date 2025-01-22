@@ -20,9 +20,9 @@ jobs:
         id: cache
         with:
           path: |
-            quadsci-challenge/google-apis/terraform.tfstate
-            quadsci-challenge/google-apis/terraform.tfstate.backup
-          key: ${{ runner.os }}-terraform-${{ hashFiles('quadsci-challenge/google-apis/google-apis.tf') }}
+            google-apis/terraform.tfstate
+            google-apis/terraform.tfstate.backup
+          key: ${{ runner.os }}-terraform-${{ hashFiles('google-apis/google-apis.tf') }}
       - name: Print github workspace
         run: |
           echo $GITHUB_WORKSPACE
@@ -53,8 +53,8 @@ jobs:
         if: always()
         with:
           path: |
-            quadsci-challenge/google-apis/terraform.tfstate
-            quadsci-challenge/google-apis/terraform.tfstate.backup
-          key: ${{ runner.os }}-terraform-${{ hashFiles('quadsci-challenge/google-apis/google-apis.tf') }}
+            google-apis/terraform.tfstate
+            google-apis/terraform.tfstate.backup
+          key: ${{ runner.os }}-terraform-${{ hashFiles('google-apis/google-apis.tf') }}
 
 
