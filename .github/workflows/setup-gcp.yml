@@ -1,0 +1,65 @@
+name: Setup GCP
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  infra-deployment:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: setup
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Cache Terraform state
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./.terraform.tfstate
+            ./.terraform.tfstate.backup
+          key: ${{ runner.os }}-terraform-${{ hashFiles('main.tfvars.json') }}
+          restore-keys: ${{ runner.os }}-terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false
+      - name: Setup GCP Credentials
+        run: |
+          echo '${{ secrets.GCP_ACCESS }}' > quadsci-access.json
+      - name: Terraform Init
+        run: terraform init
+      - name: Terraform Validate
+        run: terraform validate
+      - name: Terraform Plan
+        run: terraform plan -var-file=main.tfvars.json
+      - name: Terraform Apply
+        run: terraform apply -var-file=main.tfvars.json -auto-approve
+  gke-setup:
+    runs-on: ubuntu-latest
+    env:
+      GKE_CLUSTER_NAME: quadsci-dask-cluster
+      GKE_ZONE: northamerica-south1
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Setup GCP Credentials
+        run: |
+          echo '${{ secrets.GCP_ACCESS }}' > quadsci-access.json
+      - name: GCloud Login
+        run: gcloud auth activate-service-account --key-file quadsci-access.json
+      - name: GCloud Configure
+        run: gcloud config set project quadsci-exercise-aaron
+      - name: Install GKE Auth Plugin
+        run: gcloud components install gke-gcloud-auth-plugin
+      - name: Configure Kubectl
+        run: gcloud container clusters get-credentials $GKE_CLUSTER_NAME --region=$GKE_ZONE
+      - name: Verify cluster information
+        run: kubectl cluster-info
+      - name: Install Desk to GKE cluster
+        run: |
+          helm repo add dask https://helm.dask.org
+          helm repo update
+          helm install --create-namespace -n dask-operator --generate-name dask/dask-kubernetes-operator
+
+
