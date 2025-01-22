@@ -53,12 +53,12 @@ resource "google_project_service" "gcp_services" {
 }
 
 resource "google_compute_network" "vpc_network" {
-  name                    = "quadsci-vpc"
+  name                    = var.network_name
   auto_create_subnetworks = false
 }
 
 resource "google_compute_subnetwork" "private_subnet" {
-  name          = "private-subnet"
+  name          = var.subnetwork_name
   ip_cidr_range = "10.0.0.0/24"
   network       = google_compute_network.vpc_network.name
   region        = var.region
@@ -85,15 +85,15 @@ resource "google_compute_router_nat" "nat_config" {
 
 resource "google_workbench_instance" "vertex_instance" {
   name = "quadsci-vertex-instance"
-  location = var.region
+  location = "${var.region}-a"
   
   gce_setup {
     machine_type      = var.vertex_instance_type
     disable_public_ip = true
 
     network_interfaces {
-      network = var.network_name
-      subnet  = var.subnetwork_name
+      network = google_compute_network.vpc_network.name
+      subnet  = google_compute_subnetwork.private_subnet.name
     }
   }
 }
@@ -144,8 +144,8 @@ resource "google_container_node_pool" "primary_node" {
 
   network_config {
     additional_node_network_configs {
-      network = var.network_name
-      subnetwork = var.subnetwork_name
+      network = google_compute_network.vpc_network.name
+      subnetwork  = google_compute_subnetwork.private_subnet.name
     }
 
   }
