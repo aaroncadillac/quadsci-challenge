@@ -40,9 +40,9 @@ jobs:
           chmod +x ./import
           ./import
       - name: Terraform Plan
-        run: terraform plan -var-file=main.tfvars.json
+        run: terraform plan -var-file=google-apis.tfvars.json
       - name: Terraform Apply
-        run: terraform apply -var-file=main.tfvars.json -auto-approve
+        run: terraform apply -var-file=google-apis.tfvars.json -auto-approve
       - name: Always cache Terraform state
         uses: actions/cache/save@v3
         if: always()
