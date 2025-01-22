@@ -31,6 +31,11 @@ jobs:
         run: terraform init
       - name: Terraform Validate
         run: terraform validate
+      - name: Terraform Import
+        if: ${{ vars.IMPORT == 'true' }}
+        run: |
+          chmod +x ./import
+          ./import
       - name: Terraform Plan
         run: terraform plan -var-file=main.tfvars.json
       - name: Terraform Apply
