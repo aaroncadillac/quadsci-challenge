@@ -138,7 +138,7 @@ resource "google_container_node_pool" "primary_node" {
   name        = var.gke_primary_node_name
   location    = var.region
   cluster     = google_container_cluster.gke-cluster.name
-  node_count  = 1
+  node_count  = 2
 
   node_config {
     preemptible     = true
