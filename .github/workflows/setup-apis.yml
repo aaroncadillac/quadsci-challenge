@@ -22,7 +22,7 @@ jobs:
           path: |
             quadsci-challenge/google-apis/.terraform.tfstate
             quadsci-challenge/google-apis/.terraform.tfstate.backup
-          key: ${{ runner.os }}-terraform-${{ hashFiles('uadsci-challenge/google-apis/google-apis.tf') }}
+          key: ${{ runner.os }}-terraform-${{ hashFiles('quadsci-challenge/google-apis/google-apis.tf') }}
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
@@ -53,6 +53,6 @@ jobs:
           path: |
             quadsci-challenge/google-apis/.terraform.tfstate
             quadsci-challenge/google-apis/.terraform.tfstate.backup
-          key: ${{ runner.os }}-terraform-${{ hashFiles('uadsci-challenge/google-apis/google-apis.tf') }}
+          key: ${{ runner.os }}-terraform-${{ hashFiles('quadsci-challenge/google-apis/google-apis.tf') }}
 
 
