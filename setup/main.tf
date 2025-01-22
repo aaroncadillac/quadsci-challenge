@@ -108,7 +108,7 @@ resource "google_cloud_run_v2_service" "cloud_run_service" {
     containers {
       image = "image"
       ports {
-        name = "http"
+        name = "http1"
         container_port = 8000
       }
     }
