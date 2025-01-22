@@ -43,6 +43,8 @@ jobs:
         run: terraform plan -var-file=main.tfvars.json
       - name: Terraform Apply
         run: terraform apply -var-file=main.tfvars.json -auto-approve
+      - name: Terraform Output
+        run: terraform output
       - name: Always cache Terraform state
         uses: actions/cache/save@v3
         if: always()

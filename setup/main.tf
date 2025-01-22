@@ -96,8 +96,8 @@ resource "google_workbench_instance" "vertex_instance" {
     disable_public_ip = true
 
     network_interfaces {
-      network = google_compute_network.vpc_network.name
-      subnet  = google_compute_subnetwork.private_subnet.name
+      network = google_compute_network.vpc_network.id
+      subnet  = google_compute_subnetwork.private_subnet.id
     }
   }
 }
@@ -129,7 +129,9 @@ resource "google_container_cluster" "gke-cluster" {
   location                 = var.region
   remove_default_node_pool = true
   initial_node_count       = 1
-  deletion_protection = false 
+  deletion_protection = false
+  network = google_compute_network.vpc_network.name
+  subnetwork = google_compute_subnetwork.private_subnet.name
 }
 
 resource "google_container_node_pool" "primary_node" {
