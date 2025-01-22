@@ -37,6 +37,7 @@ jobs:
         run: terraform apply -var-file=main.tfvars.json -auto-approve
   gke-setup:
     runs-on: ubuntu-latest
+    needs: [infra-deployment]
     env:
       GKE_CLUSTER_NAME: quadsci-dask-cluster
       GKE_ZONE: northamerica-south1
@@ -51,7 +52,7 @@ jobs:
       - name: GCloud Configure
         run: gcloud config set project quadsci-exercise-aaron
       - name: Install GKE Auth Plugin
-        run: gcloud components install gke-gcloud-auth-plugin
+        run: apt-get install google-cloud-cli-gke-gcloud-auth-plugin
       - name: Configure Kubectl
         run: gcloud container clusters get-credentials $GKE_CLUSTER_NAME --region=$GKE_ZONE
       - name: Verify cluster information
