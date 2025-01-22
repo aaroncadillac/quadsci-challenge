@@ -1,4 +1,4 @@
 #!/bin/bash
 
-terraform import google_service_account.gke_service_account projects/quadsci-exercise-aaron/serviceAccounts/quadsci-gke-sa@quadsci-exercise-aaron.iam.gserviceaccount.com && \
-terraform import google_container_cluster.gke-cluster projects/quadsci-exercise-aaron/locations/northamerica-south1/clusters/quadsci-dask-cluster
+terraform import -var-file=main.tfvars.json google_service_account.gke_service_account projects/quadsci-exercise-aaron/serviceAccounts/quadsci-gke-sa@quadsci-exercise-aaron.iam.gserviceaccount.com && \
+terraform import -var-file=main.tfvars.json google_container_cluster.gke-cluster projects/quadsci-exercise-aaron/locations/northamerica-south1/clusters/quadsci-dask-cluster
