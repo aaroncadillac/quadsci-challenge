@@ -40,6 +40,10 @@ variable "gcp_service_list" {
   type = list(string)
 }
 
+variable "cloud_run_image" {
+  type = string
+}
+
 provider "google" {
   credentials = file("quadsci-access.json")
   project = var.project_name
@@ -106,7 +110,7 @@ resource "google_cloud_run_v2_service" "cloud_run_service" {
 
   template {
     containers {
-      image = "image"
+      image = var.cloud_run_image
       ports {
         name = "http1"
         container_port = 8000
@@ -125,6 +129,8 @@ resource "google_container_cluster" "gke-cluster" {
   location                 = var.region
   remove_default_node_pool = true
   initial_node_count       = 1
+  network    = google_compute_network.vpc_network.name
+  subnetwork = google_compute_subnetwork.private_subnet.name
 }
 
 resource "google_container_node_pool" "primary_node" {
@@ -140,14 +146,6 @@ resource "google_container_node_pool" "primary_node" {
     oauth_scopes    = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]
-  }
-
-  network_config {
-    additional_node_network_configs {
-      network = google_compute_network.vpc_network.name
-      subnetwork  = google_compute_subnetwork.private_subnet.name
-    }
-
   }
 }
 
