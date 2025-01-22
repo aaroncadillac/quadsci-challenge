@@ -22,7 +22,7 @@ jobs:
           path: |
             google-apis/terraform.tfstate
             google-apis/terraform.tfstate.backup
-          key: ${{ runner.os }}-terraform-${{ hashFiles('google-apis/google-apis.tf') }}
+          key: ${{ runner.os }}-terraform-${{ hashFiles('google-apis/google-apis.tf', 'google-apis/google-apis.tfvars.json') }}
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
@@ -50,6 +50,6 @@ jobs:
           path: |
             google-apis/terraform.tfstate
             google-apis/terraform.tfstate.backup
-          key: ${{ runner.os }}-terraform-${{ hashFiles('google-apis/google-apis.tf') }}
+          key: ${{ runner.os }}-terraform-${{ hashFiles('google-apis/google-apis.tf', 'google-apis/google-apis.tfvars.json') }}
 
 
