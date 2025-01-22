@@ -19,7 +19,7 @@ jobs:
           path: |
             setup/terraform.tfstate
             setup/terraform.tfstate.backup
-          key: ${{ runner.os }}-terraform-setup
+          key: ${{ runner.os }}-terraform-setup-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
@@ -47,7 +47,7 @@ jobs:
           path: |
             setup/terraform.tfstate
             setup/terraform.tfstate.backup
-          key: ${{ runner.os }}-terraform-setup
+          key: ${{ runner.os }}-terraform-setup-${{ github.run_id }}
   gke-setup:
     runs-on: ubuntu-latest
     needs: [infra-deployment]
