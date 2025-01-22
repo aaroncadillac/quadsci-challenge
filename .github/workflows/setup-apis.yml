@@ -23,11 +23,6 @@ jobs:
             google-apis/terraform.tfstate
             google-apis/terraform.tfstate.backup
           key: ${{ runner.os }}-terraform-${{ hashFiles('google-apis/google-apis.tf') }}
-      - name: Print github workspace
-        run: |
-          echo $GITHUB_WORKSPACE
-          pwd
-          ls -la $GITHUB_WORKSPACE
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
