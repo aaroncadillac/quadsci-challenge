@@ -41,7 +41,7 @@ variable "gke_primary_node_name" {
 }
 
 provider "google" {
-  credentials = file("../quadsci-access.json")
+  credentials = file("quadsci-access.json")
   project = "quadsci-exercise-aaron"
   region  = var.region
 }
