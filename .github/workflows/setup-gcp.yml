@@ -58,7 +58,7 @@ jobs:
     needs: [infra-deployment]
     env:
       GKE_CLUSTER_NAME: quadsci-dask-cluster
-      GKE_ZONE: northamerica-south1
+      GKE_ZONE: us-west2
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
