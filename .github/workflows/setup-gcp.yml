@@ -70,7 +70,7 @@ jobs:
       - name: GCloud Configure
         run: gcloud config set project quadsci-exercise-aaron
       - name: Install GKE Auth Plugin
-        run: apt-get install google-cloud-cli-gke-gcloud-auth-plugin
+        run: sudo apt-get install google-cloud-cli-gke-gcloud-auth-plugin
       - name: Configure Kubectl
         run: gcloud container clusters get-credentials $GKE_CLUSTER_NAME --region=$GKE_ZONE
       - name: Verify cluster information
